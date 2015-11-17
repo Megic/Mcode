@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Mcode</title>
+    <link rel="stylesheet" type="text/css" href="css/codemirror.css"/>
+    <link rel="stylesheet" type="text/css" href="css/monokai.css"/>
+    <link rel="stylesheet" type="text/css" href="css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
+</head>
+
+<body>
+<!--loading.begin-->
+<div id="loading">
+    <div id="loading-box"><b><span>M</span>code</b>
+
+        <p>加载中...</p></div>
+</div>
+<!--loading.end-->
+<header class="head">
+    <h1 class="title"><b>M</b>code</h1>
+
+    <div class="button-group">
+        <button class="button-group-first active" data-type="show">HTML</button>
+        <button class="active" data-type="show">CSS</button>
+        <button class="active" data-type="show">JavaScript</button>
+        <button class="button-group-last active" data-type="show">Output</button>
+    </div>
+
+</header>
+<div class="main">
+    <div class="htmlBox numBox">
+        <div class="numBox-body">
+            <div class="box-head">
+                <select name="" class="link-file">
+                    <option value="File">HTML</option>
+                </select>
+            </div>
+            <div class="box-CodeMirror"><textarea id="htmlBox"></textarea></div>
+        </div>
+    </div>
+    <div class="slider"></div>
+    <div class="cssBox numBox">
+        <div class="numBox-body">
+            <div class="box-head">
+                <select name="" class="link-file">
+                    <option value="File">CSS</option>
+                </select>
+            </div>
+            <div class="box-CodeMirror"><textarea id="cssBox">ddfgdg</textarea></div>
+        </div>
+    </div>
+    <div class="slider"></div>
+    <div class="javascriptBox numBox">
+        <div class="numBox-body">
+            <div class="box-head">
+                <select name="" class="link-file">
+                    <option value="File">JavaScript</option>
+                </select>
+            </div>
+            <div class="box-CodeMirror"><textarea name="" rows="" cols="" id="javascriptBox"></textarea></div>
+        </div>
+    </div>
+    <div class="slider"></div>
+    <div class="outputBox numBox">
+        <div class="numBox-body">
+            <div class="box-head">
+                <select  id="winsize" class="link-file">
+                    <option value="1">100%</option>
+                    <option value="2">320*568</option>
+                </select>
+               <div class="f-fr outputBox-br">
+                <div class="f-fl">
+                    <b class="f-fl">快捷键:Ctrl+S</b></div><button class="c-btn" id="build">生成预览</button>
+               </div>
+            </div>
+            <div class="box-CodeMirror">
+                <iframe id="showCode" name="showCode"></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="slider"></div>
+</div>
+<div id='test' style="clear:both;"></div>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script type="text/javascript">
+
+    boxHeight();
+    var curlast = $('.slider:visible').last();
+    curlast.hide();
+    $(function () {
+        $('#winsize').change(function(){
+            var val=parseInt($(this).val());
+            var w,h;
+            switch (val){
+                case 1:
+                    w='96%';h="96%";
+                    break;
+                case 2:
+                    w='320';h="568";
+                    break;
+            }
+            $('#showCode').addClass('type-'+val).width(w).height(h);
+
+        });
+        changeWidth();
+        //隐藏loading
+        setTimeout(function () {
+            var loading = $('#loading');
+            loading.addClass('hide');
+            setTimeout(function () {
+                loading.remove();
+            }, 300);
+        }, 100);
+        //点击聚焦
+        var boxBD = $('.numBox-body');
+        boxBD.click(function () {
+            boxBD.removeClass('active');
+            $(this).addClass('active');
+        });
+    });
+    $(window).resize(function () {
+        boxHeight();
+        changeWidth()
+    });
+
+
+    //点击按钮添加背景
+    $('.button-group button').each(function () {
+        $(this).click(function () {
+            curlast.show();
+            var num = $('.button-group button').index($(this));
+            var type = $(this).attr('data-type');
+            var numbox = $('.numBox').eq(num);
+            var boxsilder = numbox.next('.slider');
+            if (type == 'show') {
+                $(this).removeClass('active');
+                numbox.hide();
+                boxsilder.hide();
+                $(this).attr('data-type', 'hide');
+            } else {
+                $(this).addClass('active');
+                numbox.show();
+                boxsilder.show();
+                $(this).attr('data-type', 'show');
+            }
+            curlast = $('.slider:visible').last();
+            curlast.hide();
+            changeWidth();
+        });
+    });
+    //拖动
+    drag();
+
+    //编辑器高度
+    function boxHeight() {
+        var winHeight = $(window).height();
+        var headHeight = $('.head').height();
+        var titleH = $('.box-head').height();
+        $('.numBox').add('.slider').height(winHeight - headHeight);
+        $('.box-CodeMirror').height(winHeight - headHeight - titleH);
+    }
+    //拖动
+    function drag() {
+        var old = {}; //记录旧坐标
+        var xin = {}; //记录新坐标
+        var obj, moving = false;
+        var obj_prev, obj_next, obj_prev_width, obj_next_width;
+        $(window).mousemove(function (e) {
+            e.preventDefault();
+            if (moving) {
+                var bt = old.x - e.pageX;
+                var prev_w = obj_prev_width - bt;
+                var next_w = obj_next_width + bt;
+                if (prev_w > 100 && next_w > 100) {
+                    if (bt > 0) {
+                        obj_prev.width(prev_w);
+                        obj_next.width(next_w);
+                    } else {
+                        obj_next.width(next_w);
+                        obj_prev.width(prev_w);
+                    }
+                }
+            }
+        }).mouseup(function () {
+            moving = false;
+        });
+        $('.slider').each(function () {
+            $(this).on('mousedown', function (e) {
+                //当鼠标点击的时候，记录鼠标点击的坐标
+                old.x = e.pageX;
+                //当鼠标移动的时候，记录新的坐标
+                obj = $(this);
+                obj_prev = obj.prevAll(':visible').eq(0);
+                obj_next = obj.nextAll(':visible').eq(0);
+                obj_prev_width = obj_prev.width();
+                obj_next_width = obj_next.width();
+                moving = true;
+               // console.log(moving)
+            });
+
+        });
+    }
+
+    function changeWidth() {
+        var len = $('.button-group .active').length;
+        var width = $('body').width() -  4* (len - 1);
+        $('.numBox').width(width / len)
+    }
+</script>
+<!--//引用codemirror-->
+
+<script src="js/codemirror.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/css.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/xml.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/htmlmixed.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/javascript.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/sublime.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/emmet.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var htmlBox = document.getElementById('htmlBox');
+    var cssBox = document.getElementById("cssBox");
+    var javascriptBox = document.getElementById("javascriptBox");
+    var extraKeys={
+        'Ctrl-S': function(){
+            buildCode();
+        }
+    };
+    var htmlCode = CodeMirror.fromTextArea(htmlBox, {
+        lineNumbers: true,
+        extraKeys:extraKeys,
+        mode: "text/html",
+        keyMap: "sublime"
+    });
+    var cssCode = CodeMirror.fromTextArea(cssBox, {
+        lineNumbers: true,
+        extraKeys:extraKeys,
+        mode: "text/css",
+        keyMap: "sublime"
+    });
+    var javascriptCode = CodeMirror.fromTextArea(javascriptBox, {
+        mode: "text/javascript",
+        extraKeys:extraKeys,
+        lineNumbers: true,
+        keyMap: "sublime"
+    });
+    emmetCodeMirror(htmlCode);
+    emmetCodeMirror(cssCode);
+    var showCode = document.showCode.document;// 代码iframe
+    //    showCode.designMode = 'On';
+    showCode.contentEditable = true;
+    $('#build').click(function(){
+        buildCode();
+    });
+    function buildCode(){
+        showCode.open();
+        showCode.writeln(htmlCode.getValue());
+        showCode.writeln('<style>'+cssCode.getValue()+'</style>');
+        showCode.writeln('<script>'+javascriptCode.getValue()+'<\/script>');
+        showCode.close();
+    }
+</script>
+
+</body>
+
+</html>
