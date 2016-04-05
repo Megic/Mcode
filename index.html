@@ -26,6 +26,7 @@
         <button class="button-group-first active" data-type="show">HTML</button>
         <button class="active" data-type="show">CSS</button>
         <button class="active" data-type="show">JavaScript</button>
+        <button class="active" data-type="show">Doc</button>
         <button class="button-group-last active" data-type="show">Output</button>
     </div>
 
@@ -42,6 +43,7 @@
         </div>
     </div>
     <div class="slider"></div>
+
     <div class="cssBox numBox">
         <div class="numBox-body">
             <div class="box-head">
@@ -61,6 +63,18 @@
                 </select>
             </div>
             <div class="box-CodeMirror"><textarea name="" rows="" cols="" id="javascriptBox"></textarea></div>
+        </div>
+    </div>
+    <div class="slider"></div>
+    <div class="docBox numBox">
+        <div class="numBox-body">
+            <div class="box-head">
+                <select name="" class="link-file">
+                    <option value="File">Doc</option>
+                </select>
+            </div>
+            <div id="apidoc" class="api-height"><div id="showApi"></div></div>
+            <div class="box-CodeMirror api-height"><textarea id="docBox"></textarea></div>
         </div>
     </div>
     <div class="slider"></div>
@@ -159,8 +173,11 @@
         var winHeight = $(window).height();
         var headHeight = $('.head').height();
         var titleH = $('.box-head').height();
+        var boxH=winHeight - headHeight - titleH;
         $('.numBox').add('.slider').height(winHeight - headHeight);
         $('.box-CodeMirror').height(winHeight - headHeight - titleH);
+        $('.api-height').eq(0).height(boxH/2+150);
+        $('.api-height').eq(1).height(boxH/2-150);
     }
     //拖动
     function drag() {
@@ -206,7 +223,7 @@
 
     function changeWidth() {
         var len = $('.button-group .active').length;
-        var width = $('body').width() -  4* (len - 1);
+        var width = $('body').width() -  5* (len - 1);
         $('.numBox').width(width / len)
     }
 </script>
@@ -217,12 +234,18 @@
 <script src="js/xml.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/htmlmixed.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/javascript.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/markdown.js"></script>
 <script src="js/sublime.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/emmet.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/showdown.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     var htmlBox = document.getElementById('htmlBox');
     var cssBox = document.getElementById("cssBox");
+    var docBox = document.getElementById("docBox");
+    var apiShow=document.getElementById('showApi');
     var javascriptBox = document.getElementById("javascriptBox");
+    var converter = new showdown.Converter();//mardown转换
+
     var extraKeys={
         'Ctrl-S': function(){
             buildCode();
@@ -240,6 +263,12 @@
         mode: "text/css",
         keyMap: "sublime"
     });
+    var docCode = CodeMirror.fromTextArea(docBox, {
+        lineNumbers: true,
+        extraKeys:extraKeys,
+        mode: 'markdown',
+        keyMap: "sublime"
+    });
     var javascriptCode = CodeMirror.fromTextArea(javascriptBox, {
         mode: "text/javascript",
         extraKeys:extraKeys,
@@ -255,6 +284,7 @@
         buildCode();
     });
     function buildCode(){
+        apiShow.innerHTML=converter.makeHtml(docCode.getValue());
         showCode.open();
         showCode.writeln(htmlCode.getValue());
         showCode.writeln('<style>'+cssCode.getValue()+'</style>');

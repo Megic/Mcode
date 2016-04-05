@@ -78,10 +78,7 @@ header {
 	overflow: hidden;
 	font-size: 0;
 }
-.htmlBox,
-.javascriptBox,
-.cssBox,
-.outputBox {
+.numBox {
 	font-size: 14px;
 	overflow: hidden;
 	display: inline-block;
@@ -93,7 +90,10 @@ header {
 	line-height:30px;
 	border-bottom: 1px dotted #ddd;
 }
-
+#apidoc{
+	overflow-y: scroll}
+#showApi{
+	margin: 10px;}
 .link-file {
 	border: 0;
 	color: #999;
@@ -177,6 +177,7 @@ header {
 	width: 96%;
 	margin: 2%;
 	height: 96%;
+	margin-bottom: 10%;
 	background: #fff;}
 .outputBox .box-CodeMirror{
 	text-align: center;}
@@ -204,8 +205,39 @@ header {
 	margin-top: 9px;
 	margin-right: 5px;}
 
-
-
+#list{
+	position: absolute;
+	width: 100%;
+	left: 0;
+	top: 60px;
+	bottom: 0;
+	background-color: #ededed;
+}
+.list-left{
+	position: absolute;
+	width: 250px;
+	height: 100%;
+	background-color: #fff;
+}
+.list-right{
+	height: 100%;
+	margin-left: 250px;
+	position: relative;}
+.list-right-left{
+	position: absolute;
+	left: 20px;
+	top: 20px;
+	bottom: 20px;
+	width:400px;}
+.list-right-right{
+	margin-left: 420px;}
+.box{
+	background-color:#fff;
+	height: 100%;}
+.f-p10{
+	/*/!*margin: 10px;*/
+	padding: 20px;
+	}
 
 
 
