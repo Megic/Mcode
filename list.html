@@ -9,41 +9,95 @@
     <link rel="stylesheet" type="text/css" href="css/index.css"/>
 </head>
 
-<body>
+<body ms-controller="app">
 <!--loading.begin-->
 <div id="loading">
     <div id="loading-box"><b><span>M</span>code</b>
-
         <p>加载中...</p></div>
 </div>
 <!--loading.end-->
 <header class="head">
     <h1 class="title"><b>M</b>code</h1>
+    <div class="user">
+        <div ms-if="!isLogin"><a href="#">登录</a> <a href="#">注册</a></div>
+        <div ms-if="isLogin"><a href="#">添加模块</a><a href="#">我的模块</a><a href="#">退出登录</a></div>
+    </div>
 </header>
 
 <div id="list">
-<div class="list-left">我是左边</div>
+    <div class="c-class">
+        选择分类 <span class="f-fr c-class-nav">&gt;</span>
+        <div class="c-class-menu">
+            <h3>基础说明</h3>
+            <div class="c-class-bd"><span>头部</span><span>表格</span><span>列表</span></div>
+        </div>
+    </div>
+<div class="list-left">
+
+    <ul class="p-list-bd">
+        <li class="p-list"><b class="p-list-h">[cheader]标准头部</b><p class="p-list-s">依赖:sdfsdf</p><p class="p-list-p">简单介绍</p></li>
+        <li class="p-list"><b class="p-list-h">[cheader]标准头部</b><p class="p-list-s">依赖:sdfsdf</p><p class="p-list-p">简单介绍</p></li>
+        <li class="p-list"><b class="p-list-h">[cheader]标准头部</b><p class="p-list-s">依赖:sdfsdf</p><p class="p-list-p">简单介绍</p></li>
+        <li class="p-list"><b class="p-list-h">[cheader]标准头部</b><p class="p-list-s">依赖:sdfsdf</p><p class="p-list-p">简单介绍</p></li>
+        <li class="p-list"><b class="p-list-h">[cheader]标准头部</b><p class="p-list-s">依赖:sdfsdf</p><p class="p-list-p">简单介绍</p></li>
+
+
+
+    </ul>
+    <div class="more">加载更多</div>
+</div>
     <div class="list-right">
         <div class="list-right-left">
            <div class="box">
-                文档
+                <div class="p-list">
+                    <b class="p-list-h">[cheader]标准头部</b><p class="p-list-s">依赖:sdfsdf</p><p class="p-list-p">简单介绍</p>
+                </div>
+               <div id="markdown">
+                   sss
+               </div>
            </div>
         </div>
-        <div class="list-right-right f-p10">
-            <div class="box">
-               内容
-            </div>
+        <div class="list-right-right">
+          <div class="list-right-body">  <iframe id="showDemo" name="showDemo"></iframe></div>
         </div>
     </div>
 </div>
-
+<script></script>
 <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/avalon.js/1.5.5/avalon.min.js"></script>
 <script>
-    var loading = $('#loading');
-    loading.addClass('hide');
-    setTimeout(function () {
-        loading.remove();
-    }, 300);
+    var app=avalon.define({
+        $id:'app',
+        isLogin:0,
+        user:{},
+        classid:'',
+        key:'',
+        my:0,
+        list:[],
+        nextPage:'http://localhost/Mcode/core/action/ListInfo.php?classid=6&line=1&tempid=9',
+        getMore:function(){
+            if(app.nextPage) {
+                $.getJSON(app.nextPage, function (data) {
+                    app.list.pushArray(data.list);
+                    app.nextPage=data.next;
+                });
+            }
+        }
+    });
+    $.getJSON('http://localhost/Mcode/core/member/login/json.php?'+new Date().getTime(), function(data) {
+        app.isLogin=data.isLogin;
+        app.user=data.user;
+        app.getMore();
+        avalon.scan();
+        var loading = $('#loading');
+        loading.addClass('hide');
+        setTimeout(function () {
+            loading.remove();
+        }, 300);
+    });
+
+
+
 </script>
 </body>
 </html>

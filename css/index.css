@@ -24,6 +24,7 @@ body {
 	font-family: 'iconfont';
 }
 header {
+	position: relative;
 	background: #0099ff;
 	height: 60px;
 	line-height: 60px;
@@ -215,7 +216,7 @@ header {
 }
 .list-left{
 	position: absolute;
-	width: 250px;
+	width: 250px;overflow-y: auto;
 	height: 100%;
 	background-color: #fff;
 }
@@ -226,11 +227,13 @@ header {
 .list-right-left{
 	position: absolute;
 	left: 20px;
-	top: 20px;
+	top: 20px;overflow-y: auto;
 	bottom: 20px;
 	width:400px;}
 .list-right-right{
-	margin-left: 420px;}
+	margin-left: 420px;
+	position: relative;
+	height: 100%;}
 .box{
 	background-color:#fff;
 	height: 100%;}
@@ -239,9 +242,107 @@ header {
 	padding: 20px;
 	}
 
+/*列表*/
+.c-class{
+	line-height: 50px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 9;
+	width: 235px;
+	height: 50px;
+	padding-left: 10px;
+	font-size: 16px;
+	color: #666;cursor: pointer;
+	background-color: #f8f8f8;
+	border-bottom: 1px solid #ddd;
+	border-left: 5px solid #f8f8f8;}
+.c-class:hover{
+border-left: 5px solid #ffcc33;}
+.c-class-nav{
+	font-family: 'song';
+	padding-right: 10px;}
+.c-class-menu{
+	display: none;
+	position: absolute;
+	padding: 10px;
+	font-size: 14px;
+	border: 3px solid #999;
+	width: 400px;
+	z-index: 9;
+	background-color: #fff;
+	left: 240px;
+	top: -5px;}
+.c-class:hover .c-class-menu{
+	display: block;}
+.c-class-menu h3{
+	font-weight: bold;
+	line-height: 30px;
+	padding: 0;
+	margin: 0;}
+.c-class-bd{
+	padding: 0;
+	line-height: 25px;
+	margin: 0;}
+.c-class-bd span{
+	display: inline-block;
+	background-color: #f1f1f1;
+	border: 1px solid #ddd;
+	margin: 4px;
+	padding-left: 8px;
+	padding-right: 8px;}
+.c-class-bd span:hover{
+	background-color: #ddd;}
 
-
-
-
+.p-list{
+	padding: 8px;cursor: pointer;
+	border-bottom: 1px dotted #ccc;
+	font-size: 12px;}
+.p-list:hover{
+	background-color: #f1f1f1;}
+.p-list-h{
+	font-size: 14px;
+	line-height: 25px;}
+.p-list-s{
+	line-height: 20px;}
+.p-list-p{
+	color: #999;}
+.p-list-bd{
+	margin-top: 50px;}
+.more{
+	margin: 5px;
+	text-align: center;
+	background-color: #f1f1f1;
+	font-size: 12px;
+	line-height: 30px;cursor: pointer;
+	border: 1px solid #ddd;
+	color: #aaa;}
+.more:hover{
+	color: #666;}
+.user{
+	position: absolute;
+	right: 0;
+	top: 0;}
+.user a{
+	color: #fff;
+	display: inline-block;
+	padding-left: 10px;
+	padding-right: 10px;
+	font-size: 14px;}
+.user a:hover{
+	background-color: #0a7fcd;}
+#markdown{
+	margin: 10px;}
+#showDemo{
+	background-color: #fff;
+	height: 100%;
+	border: none;
+	width: 100%;}
+.list-right-body{
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	right: 20px;
+	bottom: 20px;}
 
 
